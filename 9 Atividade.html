@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Temperaturas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            transition: background-color 0.5s;
+        }
+        h1 {
+            margin-top: 20px;
+        }
+        table {
+            margin: 20px auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        input, select, button {
+            padding: 10px;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+        #resultado {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Conversor de Temperaturas</h1>
+
+    <table>
+        <tr>
+            <td>Temperatura:</td>
+            <td><input type="number" id="temperatura" placeholder="Insere valor"></td>
+        </tr>
+        <tr>
+            <td>Converter de:</td>
+            <td>
+                <select id="de">
+                    <option value="celsius">Celsius</option>
+                    <option value="fahrenheit">Fahrenheit</option>
+                    <option value="kelvin">Kelvin</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Para:</td>
+            <td>
+                <select id="para">
+                    <option value="celsius">Celsius</option>
+                    <option value="fahrenheit">Fahrenheit</option>
+                    <option value="kelvin">Kelvin</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button onclick="converter()">Converter</button>
+            </td>
+        </tr>
+    </table>
+
+    <div id="resultado">Resultado: --</div>
+
+    <script>
+        function converter() {
+            let valor = parseFloat(document.getElementById("temperatura").value);
+            const de = document.getElementById("de").value;
+            const para = document.getElementById("para").value;
+
+            if (isNaN(valor)) {
+                alert("Por favor, insere um valor numérico.");
+                return;
+            }
+
+            let resultado;
+            if (de === "celsius" && para === "fahrenheit") resultado = (valor * 9/5) + 32;
+            else if (de === "fahrenheit" && para === "celsius") resultado = (valor - 32) * 5/9;
+            else if (de === "celsius" && para === "kelvin") resultado = valor + 273.15;
+            else if (de === "kelvin" && para === "celsius") resultado = valor - 273.15;
+            else if (de === "fahrenheit" && para === "kelvin") resultado = (valor - 32) * 5/9 + 273.15;
+            else if (de === "kelvin" && para === "fahrenheit") resultado = (valor - 273.15) * 9/5 + 32;
+            else resultado = valor;
+
+            resultado = resultado.toFixed(2);
+            document.getElementById("resultado").innerText = `Resultado: ${resultado}° ${para.charAt(0).toUpperCase() + para.slice(1)}`;
+            mudarCorFundo(parseFloat(resultado), para);
+        }
+
+        function mudarCorFundo(temperatura, unidade) {
+            let celsius = unidade === "fahrenheit" ? (temperatura - 32) * 5/9 : unidade === "kelvin" ? temperatura - 273.15 : temperatura;
+            document.body.style.backgroundColor = celsius <= 0 ? "blue" : celsius >= 30 ? "red" : "yellow";
+        }
+
+        document.getElementById("temperatura").onfocus = function() {
+            let temp = prompt("Insere a temperatura para converter:");
+            if (temp !== null) document.getElementById("temperatura").value = temp;
+        };
+    </script>
+
+    <p><a href="https://www.nist.gov/pml/weights-and-measures/metric-conversion-calculator" target="_blank">Fonte: NIST</a></p>
+</body>
+</html>
